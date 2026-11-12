@@ -101,12 +101,7 @@ BloxOS uses a combination of technologies selected for different system layers.
 | C | System-level functionality |
 | C++ | Native system components and integrations |
 | Assembly | Low-level architecture-specific operations |
-| Qt 6 | Native graphical framework |
-| Qt Quick | Modern interface rendering |
-| QML | Desktop UI and component development |
-| JavaScript | QML interaction logic |
 | CMake | Build system configuration |
-| Ninja | Build execution |
 | NASM | Assembly development |
 | GRUB / UEFI | Boot infrastructure, depending on target configuration |
 
