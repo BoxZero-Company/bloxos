@@ -20,79 +20,114 @@
 
 ## About BloxOS
 
-**BloxOS** is an operating system developed by **BoxZero**, with the ambition of creating a modern, independent, and extensible computing platform.
+**BloxOS** is an independent operating system project developed by **BoxZero**.
 
-Built around a dedicated system architecture and a modern graphical environment, BloxOS aims to combine system-level engineering, performance, usability, and customization into a unified operating system experience.
+BloxOS is being built as a real operating system, with its own kernel development, boot process, memory-level operations, framebuffer rendering, and graphical environment.
 
-Unlike a standalone desktop application, BloxOS is being developed as a complete operating system project, covering multiple layers of computing — from its kernel and boot infrastructure to system services, graphical components, and applications.
+The project focuses on developing the essential layers of an operating system rather than building a desktop application on top of an existing graphical framework.
 
-Development is focused on establishing a reliable foundation that can evolve into a complete and capable computing platform.
+Its development combines low-level Rust programming, x86_64 architecture support, boot infrastructure, and custom graphical system components.
+
+The long-term goal is to create a modern, independent, and extensible operating system under the BoxZero ecosystem.
 
 ## Core Vision
 
-BloxOS is guided by six fundamental principles:
+BloxOS is built around the following principles:
 
-- **Modern Architecture** — A modular and structured foundation designed for long-term development.
-- **Performance** — Efficient system components and optimized resource utilization.
-- **User Experience** — A consistent, intuitive, and visually refined desktop environment.
-- **Customization** — Flexible configuration of the desktop and system environment.
-- **Extensibility** — A foundation for applications, services, tools, and future integrations.
-- **Independence** — Developing a distinctive operating system ecosystem under the BoxZero brand.
+- **System Independence** — Developing dedicated operating system components.
+- **Low-Level Engineering** — Working directly with kernel-level functionality and hardware interfaces.
+- **Performance** — Building efficient system components with careful resource management.
+- **Modern Experience** — Creating a consistent and visually refined desktop environment.
+- **Modularity** — Keeping system components organized and extensible.
+- **Long-Term Development** — Establishing a foundation for future system capabilities.
 
-## Features & Components
+## Current Development
 
-BloxOS is being developed across several interconnected system layers. The following sections describe its current development direction and planned capabilities.
+BloxOS development currently focuses on its kernel, boot process, graphical rendering infrastructure, and system foundations.
 
-### 1. System Architecture
+### Kernel Development
 
-The system architecture provides the foundation for the operating system.
+The BloxOS kernel is being developed in Rust.
 
-Key development areas include:
+Current implementation areas include:
 
-- Dedicated BloxOS kernel development.
-- Modular organization of system components.
-- Separation of core system functionality and user applications.
+- A `no_std` kernel environment.
+- A `no_main` entry point.
+- x86_64 target architecture.
+- Multiboot2 boot information handling.
+- Kernel initialization.
 - Low-level system operations.
-- Boot infrastructure and system initialization.
-- Foundations for hardware and platform integration.
+- Framebuffer integration.
 
-### 2. Graphical Environment
+The kernel is one of the central components of BloxOS and provides the foundation for future system functionality.
 
-BloxOS aims to provide a modern desktop experience with a consistent visual identity.
+### Boot Infrastructure
 
-Planned graphical components include:
+BloxOS includes a dedicated boot and startup development process.
 
-- Modern desktop environment.
-- Qt Quick and QML-based graphical components.
-- Desktop navigation and application launcher.
+Current development and testing involve:
+
+- Multiboot2 boot support.
+- GRUB-based boot configurations.
+- ISO image generation.
+- UEFI-based virtual machine testing.
+- Kernel loading and startup.
+- QEMU boot testing.
+
+The boot infrastructure is being developed to provide a reliable transition from the boot environment to the BloxOS kernel.
+
+### Graphics & Framebuffer
+
+BloxOS includes its own graphical rendering development.
+
+The current implementation includes:
+
+- Framebuffer access.
+- Pixel format handling.
+- Framebuffer-based rendering infrastructure.
+- Rust-based graphical modules.
+- Integration between the kernel and graphical components.
+
+The graphical system is being developed as part of the operating system itself.
+
+### Desktop Environment
+
+The BloxOS desktop environment is under active development.
+
+Its intended components include:
+
+- Desktop interface.
 - Start Menu.
-- Taskbar and desktop panels.
-- Window management and application interfaces.
+- Taskbar.
+- TopBar.
+- Window management.
+- Application launcher.
 - Lock Screen.
 - System notifications.
-- Light and dark themes.
-- Responsive desktop layouts.
+- Integrated system applications.
 
-### 3. System Applications
+These components are part of the broader BloxOS graphical environment and are being developed alongside the underlying system infrastructure.
 
-The BloxOS application ecosystem is designed to include integrated tools for everyday system operations.
+## Planned System Applications
 
-| Application | Purpose |
+The following applications are part of the BloxOS development direction:
+
+| Component | Purpose |
 |---|---|
-| File Manager | Browse, organize, and manage files and directories. |
-| Terminal | Access command-line tools and system commands. |
-| Settings | Configure system and desktop preferences. |
-| Start Menu | Discover and launch installed applications. |
+| File Explorer | Browse and organize files and directories. |
+| Terminal | Access system commands and command-line functionality. |
+| Settings | Configure operating system preferences. |
+| Start Menu | Access and launch applications. |
 | System Installer | Install and configure BloxOS. |
 | Lock Screen | Provide a dedicated session entry interface. |
 
-Additional built-in applications and utilities may be introduced as development progresses.
+These applications are development goals and should not be interpreted as fully implemented components.
 
-### 4. File System & Application Environment
+## File System & Application Organization
 
-BloxOS is designed around an organized system and application structure.
+BloxOS is planned to provide a structured environment for system files, applications, and user data.
 
-The planned application directory organization includes:
+The intended user-facing organization includes:
 
 ```text
 BloxOS/
@@ -107,86 +142,60 @@ BloxOS/
     └── User accounts and personal files
 ```
 
-The application environment aims to support:
+The planned application infrastructure includes:
 
-- Separate locations for 64-bit and 32-bit applications.
-- Organized user directories.
-- System and user application separation.
+- Separate application locations.
+- User and system file organization.
 - Application management.
-- Package management infrastructure.
-- Future application installation and update workflows.
+- Package management.
+- Future application installation and update support.
 
-### 5. Package Management
+## BXZ-LANG Integration
 
-A dedicated package management infrastructure is part of the BloxOS development direction.
+**BXZ-LANG** is a language project developed within the BoxZero ecosystem.
 
-Its intended responsibilities include:
+BloxOS is designed to integrate BXZ-LANG into its installation experience.
 
-- Managing application packages.
-- Organizing installed software.
-- Supporting application installation and removal.
-- Managing package information and dependencies.
-- Providing a foundation for future software distribution.
+During installation, users will be able to choose whether to install BXZ-LANG or continue without it.
 
-The package management system will evolve alongside the application ecosystem.
-
-### 6. Language & Localization
-
-BloxOS is designed with multilingual support and localization in mind.
-
-**BXZ-LANG**, a language project from the BoxZero ecosystem, is being integrated into the BloxOS installation experience.
-
-During installation, users will be able to choose whether to install BXZ-LANG or continue the setup without it.
-
-The broader localization direction includes:
-
-- Multilingual interface support.
-- Language configuration.
-- Improved localization infrastructure.
-- Integration with BoxZero language technologies.
-
----
+This integration is part of the broader BoxZero ecosystem and its localization direction.
 
 ## Technology Stack
 
-BloxOS combines several technologies, each selected for specific system development responsibilities.
+The technologies currently associated with BloxOS development include:
 
-| Technology | Primary Purpose |
+| Technology | Purpose |
 |---|---|
 | Rust | Kernel and low-level system development |
-| C | System-level functionality |
-| C++ | Native components and system integrations |
-| Assembly | Architecture-specific low-level operations |
-| Qt 6 | Graphical application and interface framework |
-| Qt Quick / QML | Modern graphical user interfaces |
-| CMake | Build system configuration |
-| Ninja | Build execution |
-| NASM | Assembly development |
-| GRUB / UEFI | Boot infrastructure, depending on target configuration |
-| QEMU | Virtual machine testing and development |
+| x86_64 | Target processor architecture |
+| Multiboot2 | Kernel boot information and boot protocol |
+| Framebuffer | Low-level graphical output |
+| GRUB | Bootloader infrastructure |
+| UEFI | Modern boot environment testing |
+| QEMU | Virtual machine and boot testing |
 
-The exact toolchain and technology requirements may vary depending on the component and target architecture.
+The technology stack may evolve as additional system components are implemented.
 
-## System Architecture
+## Project Architecture
 
-BloxOS follows a modular architecture intended to separate system responsibilities and support maintainable development.
+BloxOS is organized around separate system responsibilities.
 
-The project is organized around the following major components:
+The following diagram represents the project's architectural direction:
 
 ```text
 BloxOS/
 │
 ├── kernel/
-│   └── Core kernel implementation
+│   └── Kernel implementation
 │
 ├── base/
-│   └── Essential base system components
+│   └── Essential system components
 │
 ├── cli/
 │   └── Command-line infrastructure
 │
 ├── package-manager/
-│   └── Package management system
+│   └── Package management
 │
 ├── shell/
 │   └── System shell
@@ -195,153 +204,89 @@ BloxOS/
 │   └── Background system services
 │
 ├── installer/
-│   └── Operating system installation
+│   └── Operating system installer
 │
 ├── gui/
-│   └── Graphical environment
+│   └── Graphical rendering and desktop components
 │
 ├── apps/
 │   └── System applications
 │
 ├── assets/
-│   └── Icons, images, and visual resources
+│   └── Icons and visual resources
 │
 ├── docs/
 │   └── Technical documentation
 │
-├── CMakeLists.txt
 └── README.md
 ```
 
-**Note:** This diagram illustrates the intended high-level project organization. The actual source tree and component boundaries may evolve during development.
+This is a high-level architectural overview, not a verified listing of every directory currently present in the repository.
 
-## Installation & Boot Experience
+## Building & Boot Testing
 
-The BloxOS installer is being designed to provide a structured and straightforward operating system setup process.
+BloxOS development includes generating bootable ISO images and testing them in a virtual machine.
 
-The planned installation workflow includes:
+### QEMU Testing
 
-1. Starting the installation environment.
-2. Selecting installation preferences.
-3. Configuring the installation.
-4. Choosing whether to install BXZ-LANG.
-5. Installing the operating system components.
-6. Completing the initial system configuration.
-7. Preparing the system for its first boot.
-
-The final installation workflow and available configuration options will depend on the implementation of each component.
-
-### Boot Infrastructure
-
-BloxOS development also includes its boot environment and system initialization process.
-
-Development areas include:
-
-- Bootloader integration.
-- GRUB and UEFI boot configurations, depending on the target.
-- Kernel loading.
-- Initial system startup.
-- Integration between the boot process and the operating system components.
-
-## Development Environment
-
-BloxOS development currently targets a Linux-based development toolchain. Windows development is also supported through compatible environments such as WSL.
-
-### Recommended Development Tools
-
-- Linux or Windows with WSL.
-- Qt 6.
-- CMake.
-- Ninja.
-- Rust toolchain.
-- GCC / G++.
-- NASM.
-- QEMU.
-- GRUB and UEFI development tools, where required.
-
-The required tools may differ depending on the component being built.
-
-## Building from Source
-
-The following commands provide a general example of configuring and building the project.
-
-### 1. Clone the Repository
-
-```bash
-git clone <YOUR-REPOSITORY-URL>
-cd BloxOS
-```
-
-### 2. Configure the Build
-
-```bash
-cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug
-```
-
-### 3. Build the Project
-
-```bash
-cmake --build build
-```
-
-### 4. Run the Desktop Target
-
-If the desktop executable is available in the current build configuration:
-
-```bash
-./build/bloxos
-```
-
-Actual executable paths and target names may differ between configurations.
-
-### Running BloxOS in QEMU
-
-For an ISO image generated by the project, a basic QEMU launch example is:
+A basic example for testing a generated ISO:
 
 ```bash
 qemu-system-x86_64 \
-  -cdrom build/bloxos.iso \
+  -cdrom build/bloxos-27H1-Horizon.iso \
   -m 512M \
-  -smp 2
+  -smp 1
 ```
 
-For UEFI-based testing, use a compatible OVMF firmware image and the appropriate boot configuration.
+### UEFI Testing
 
-**Important:** These commands are examples. The actual output paths, build targets, firmware requirements, and runtime options depend on the current source tree and build configuration.
+BloxOS also undergoes UEFI boot testing with a compatible firmware image.
+
+Example configuration:
+
+```bash
+qemu-system-x86_64 \
+  -machine q35 \
+  -m 512M \
+  -smp 1 \
+  -drive if=pflash,format=raw,unit=0,readonly=on,file="PATH_TO_UEFI_CODE.fd" \
+  -cdrom build/bloxos-27H1-Horizon.iso \
+  -boot d
+```
+
+Replace the firmware path with the location of the compatible UEFI firmware on your system.
+
+**Note:** These commands are examples for testing an existing ISO image. Exact compilation and ISO-generation instructions will be documented alongside the actual build configuration and source files.
 
 ## Development Roadmap
 
-BloxOS development is organized into several major areas.
+BloxOS development is divided into several major areas.
 
-| Component | Development Focus |
+| Area | Development Focus |
 |---|---|
-| Kernel | Core architecture and system foundations |
-| Base System | Essential operating system functionality |
-| Boot Infrastructure | Bootloader integration and system initialization |
-| GUI | Desktop environment and graphical interface |
-| System Services | Background system operations |
-| Installer | Installation and system configuration |
+| Kernel | Kernel initialization and core functionality |
+| Boot Infrastructure | Bootloader and UEFI integration |
+| Graphics | Framebuffer and rendering infrastructure |
+| Desktop | Desktop environment and system interface |
+| Base System | Essential operating system components |
+| System Services | Background system functionality |
+| Installer | Installation and initial configuration |
+| File Explorer | File and directory management |
 | Package Manager | Application and package infrastructure |
-| File Manager | File browsing and management |
-| System Applications | Integrated desktop utilities |
-| Localization | Language and regional support |
-| Documentation | Technical and user documentation |
+| System Applications | Integrated operating system utilities |
 
-### Planned Improvements
+### Future Development Goals
 
-Future development goals include:
+- Expanded hardware support.
+- More complete kernel functionality.
+- Improved graphics infrastructure.
+- Advanced desktop and window management.
+- Integrated system applications.
+- Application installation and management.
+- Expanded localization.
+- Improved system stability and security.
 
-- Expanded hardware compatibility.
-- A more complete desktop environment.
-- Improved window and application management.
-- Advanced system configuration.
-- Expanded package management capabilities.
-- Improved localization support.
-- Enhanced security and stability.
-- Additional developer tools.
-- Further system performance optimizations.
-
-*Roadmap items represent development goals and are not necessarily available in the current build.*
+Roadmap items are planned development goals, not claims of completed functionality.
 
 ## Development Status
 
@@ -349,11 +294,9 @@ Future development goals include:
 
 BloxOS is actively being developed by BoxZero.
 
-Its kernel, system architecture, graphical environment, installation infrastructure, and other components are evolving through ongoing development and testing.
+Current work includes kernel development, boot infrastructure, framebuffer rendering, graphical system components, and virtual machine testing.
 
-The current development builds are intended for development and testing purposes.
-
-**BloxOS is not yet a final production release.**
+The project is still evolving and is not yet a final production release.
 
 ### Target Release
 
@@ -361,27 +304,25 @@ The current development builds are intended for development and testing purposes
 
 Target release: **March 2027**
 
-The release schedule and feature availability may change as development progresses.
+Release timing and feature availability may change as development progresses.
 
 ## Contributing
 
 We welcome feedback, suggestions, bug reports, and contributions from the developer community.
 
-There are several ways to contribute to BloxOS:
+You can contribute by:
 
-1. **Report Bugs** — Submit clear bug reports through GitHub Issues.
-2. **Suggest Features** — Share ideas that could improve BloxOS.
-3. **Improve Documentation** — Help make technical documentation clearer and more complete.
-4. **Review Code** — Identify potential improvements and issues.
-5. **Submit Pull Requests** — Propose code changes and improvements.
+1. Reporting bugs through GitHub Issues.
+2. Suggesting improvements.
+3. Improving technical documentation.
+4. Reviewing source code.
+5. Submitting Pull Requests.
 
-Before contributing, please make sure your changes are consistent with the project's architecture and development direction.
+Contributions should follow the project's architecture and development direction.
 
 ## About BoxZero
 
-**BloxOS** is developed by **BoxZero**, an independent technology and software development initiative focused on building software, tools, and digital experiences.
-
-BoxZero aims to create innovative projects through engineering, creativity, and continuous development.
+BloxOS is developed by **BoxZero**, an independent technology and software development initiative focused on building software, tools, and digital experiences.
 
 ### Official Links
 
@@ -392,11 +333,9 @@ BoxZero aims to create innovative projects through engineering, creativity, and 
 
 ## License
 
-The project license will be specified in the repository.
+BloxOS is licensed under the **MIT License**.
 
-Until a license is officially added, no permission to redistribute, modify, or reuse the source code should be assumed.
-
-Please check the repository for the latest licensing information.
+See the [LICENSE](LICENSE) file for the complete license text.
 
 ---
 
