@@ -1,0 +1,9 @@
+{
+  "id": "com.boxzero.calculator",
+  "name": "BloxOS Calculator Demo",
+  "version": "1.0.0",
+  "publisher": "BoxZero",
+  "architecture": "any",
+  "entrypoint": "bin/README.txt",
+  "description": "A sample package used to validate the Blox Package format."
+}

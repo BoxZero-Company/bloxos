@@ -1,0 +1,13 @@
+
+[package]
+name = "bloxos-kernel"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+build = "build.rs"
+
+[dependencies]
+bloxos-gui = { path = "../gui" }
+
+[build-dependencies]
+cc = "1.2"
