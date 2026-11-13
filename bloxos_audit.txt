@@ -1,0 +1,145 @@
+===== PAGING =====
+; Minimal identity map: first 1 GiB using 2 MiB pages.
+; Called from 32-bit protected mode before enabling long mode.
+BITS 32
+SECTION .text
+GLOBAL boot_setup_paging
+EXTERN pml4_table
+EXTERN pdpt_table
+EXTERN pd_table
+
+boot_setup_paging:
+    push edi
+    push ecx
+
+    ; Clear all three page-table pages.
+    mov edi, pml4_table
+    xor eax, eax
+    mov ecx, (4096 * 3) / 4
+    rep stosd
+
+    ; PML4[0] -> PDPT, PDPT[0] -> PD.
+    mov eax, pdpt_table
+    or eax, 0x03
+    mov [pml4_table], eax
+
+    mov eax, pd_table
+    or eax, 0x03
+    mov [pdpt_table], eax
+
+    ; 512 x 2 MiB pages = 1 GiB identity mapping.
+    xor ecx, ecx
+.map_loop:
+    mov eax, ecx
+    shl eax, 21
+    or eax, 0x83                 ; Present | Writable | Huge page
+    mov [pd_table + ecx * 8], eax
+    mov dword [pd_table + ecx * 8 + 4], 0
+    inc ecx
+    cmp ecx, 512
+    jne .map_loop
+
+    pop ecx
+    pop edi
+    ret
+===== GDT =====
+; Flat GDT: null, 64-bit code, data.
+BITS 32
+SECTION .rodata
+ALIGN 8
+GLOBAL gdt64_descriptor
+ gdt64_start:
+    dq 0x0000000000000000
+    dq 0x00AF9A000000FFFF
+    dq 0x00CF92000000FFFF
+ gdt64_end:
+ gdt64_descriptor:
+    dw gdt64_end - gdt64_start - 1
+    dd gdt64_start
+===== IDT =====
+; Load an IDT descriptor supplied by the kernel (System V AMD64 ABI).
+BITS 64
+DEFAULT REL
+SECTION .text
+GLOBAL bloxos_load_idt
+bloxos_load_idt:
+    lidt [rdi]
+    ret
+===== INTERRUPTS =====
+BITS 64
+SECTION .text
+GLOBAL bloxos_disable_interrupts
+GLOBAL bloxos_enable_interrupts
+GLOBAL bloxos_halt
+bloxos_disable_interrupts:
+    cli
+    ret
+bloxos_enable_interrupts:
+    sti
+    ret
+bloxos_halt:
+    hlt
+    ret
+===== MULTIBOOT =====
+; Multiboot2 constants and tiny boot-information helpers.
+BITS 64
+SECTION .text
+GLOBAL bloxos_multiboot2_magic_valid
+bloxos_multiboot2_magic_valid:
+    xor eax, eax
+    cmp edi, 0x36D76289
+    sete al
+    ret
+===== CPU =====
+BITS 64
+SECTION .text
+GLOBAL bloxos_cpu_has_cpuid
+; Returns 1 in EAX when CPUID is available, otherwise 0.
+bloxos_cpu_has_cpuid:
+    pushfq
+    pop rax
+    mov rcx, rax
+    xor rax, 1 << 21
+    push rax
+    popfq
+    pushfq
+    pop rax
+    xor rax, rcx
+    shr rax, 21
+    and eax, 1
+    push rcx
+    popfq
+    ret
+===== GRUB =====
+set timeout=5
+set default=0
+
+menuentry "BloxOS" {
+    search --no-floppy --file --set=root /boot/kernel.elf
+    multiboot2 /boot/kernel.elf
+    boot
+}===== ISO GRUB =====
+set timeout=5
+set default=0
+
+menuentry "BloxOS" {
+    search --no-floppy --file --set=root /boot/kernel.elf
+    multiboot2 /boot/kernel.elf
+    boot
+}===== ISO EL TORITO =====
+GNU xorriso 1.5.8.pl02 : RockRidge filesystem manipulator, libburnia project.
+
+xorriso : NOTE : Loading ISO image tree from LBA 0
+xorriso : UPDATE :       9 nodes read in 1 seconds
+xorriso : NOTE : Detected El-Torito boot information which currently is set to be discarded
+Drive current: -indev 'build\bloxos-uefi-new.iso'
+Media current: stdio file, overwriteable
+Media status : is written , is appendable
+Boot record  : El Torito , MBR cyl-align-off
+Media summary: 1 session, 21316 data blocks, 41.6m data,  202g free
+Volume id    : 'BLOXOS'
+El Torito catalog  : 36  1
+El Torito cat path : /boot.catalog
+El Torito images   :   N  Pltf  B   Emul  Ld_seg  Hdpt  Ldsiz         LBA
+El Torito boot img :   1  UEFI  y   none  0x0000  0x00  63488          37
+El Torito img path :   1  /EFI/efiboot.img

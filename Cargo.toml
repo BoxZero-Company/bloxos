@@ -1,0 +1,28 @@
+
+[workspace]
+resolver = "2"
+
+members = [
+    "kernel",
+    "gui",
+    "installer",
+    "desktop",
+    "system",
+    "package-manager",
+    "filesystem"
+]
+
+[workspace.package]
+version = "0.2.0"
+edition = "2021"
+license = "MIT"
+authors = ["BloxZero"]
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"
+opt-level = "s"
+lto = true
+codegen-units = 1

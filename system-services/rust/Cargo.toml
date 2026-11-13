@@ -1,0 +1,10 @@
+[package]
+name = "bloxos-system-service"
+version = "0.1.0"
+edition = "2021"
+description = "BloxOS native system-service prototype"
+license = "MIT"
+
+[[bin]]
+name = "bloxos-service"
+path = "src/main.rs"

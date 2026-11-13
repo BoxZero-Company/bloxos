@@ -1,0 +1,68 @@
+===== GUI =====
+Folder PATH listing
+Volume serial number is A4AA-A864
+C:\USERS\FARHAD\DESKTOP\OPERATORINGSYSTEMS\BLOXOS\GUI
+|   Cargo.toml
+|   
+\---src
+    |   gui_rect.rs
+    |   lib.rs
+    |   
+    +---input
+    |       mod.rs
+    |       
+    +---renderer
+    |       canvas.rs
+    |       framebuffer.rs
+    |       mod.rs
+    |       primitives.rs
+    |       
+    +---themes
+    |       mod.rs
+    |       
+    \---widgets
+            button.rs
+            mod.rs
+            progress_bar.rs
+            
+===== DESKTOP =====
+Folder PATH listing
+Volume serial number is A4AA-A864
+C:\USERS\FARHAD\DESKTOP\OPERATORINGSYSTEMS\BLOXOS\DESKTOP
+|   Cargo.toml
+|   
+\---src
+        main.rs
+        
+===== INSTALLER =====
+Folder PATH listing
+Volume serial number is A4AA-A864
+C:\USERS\FARHAD\DESKTOP\OPERATORINGSYSTEMS\BLOXOS\INSTALLER
+|   Cargo.toml
+|   
++---config
++---src
+|       main.rs
+|       
+\---ui
+===== SYSTEM =====
+Folder PATH listing
+Volume serial number is A4AA-A864
+C:\USERS\FARHAD\DESKTOP\OPERATORINGSYSTEMS\BLOXOS\SYSTEM
+|   Cargo.toml
+|   
+\---src
+    |   lib.rs
+    |   
+    +---drivers
+    |       mod.rs
+    |       
+    +---network
+    |       mod.rs
+    |       
+    +---services
+    |       mod.rs
+    |       
+    \---storage
+            mod.rs
+            

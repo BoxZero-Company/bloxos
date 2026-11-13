@@ -1,0 +1,279 @@
+===== ROOT CARGO =====
+
+[workspace]
+resolver = "2"
+members = [
+    "kernel",
+    "gui",
+    "installer",
+    "desktop",
+    "system",
+    "package-manager",
+    "filesystem"
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+authors = ["BloxZero"]
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"
+opt-level = "s"
+lto = true
+codegen-units = 1
+===== GUI CARGO =====
+
+[package]
+name = "bloxos-gui"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+path = "src/lib.rs"
+===== GUI LIB =====
+
+pub mod renderer;
+pub mod widgets;
+pub mod themes;
+pub mod input;
+pub mod gui_rect;
+
+pub struct GuiEngine {
+    pub width: usize,
+    pub height: usize,
+    pub background: u32,
+}
+
+impl GuiEngine {
+    pub fn new(width: usize, height: usize) -> Self {
+        Self {
+            width,
+            height,
+            background: 0xFF08090D,
+        }
+    }
+}
+===== GUI FRAMEBUFFER =====
+
+pub struct Framebuffer<'a> {
+    pub buffer: &'a mut [u32],
+    pub width: usize,
+    pub height: usize,
+}
+
+impl<'a> Framebuffer<'a> {
+    pub fn new(
+        buffer: &'a mut [u32],
+        width: usize,
+        height: usize,
+    ) -> Self {
+        Self {
+            buffer,
+            width,
+            height,
+        }
+    }
+
+    pub fn clear(&mut self, color: u32) {
+        self.buffer.fill(color);
+    }
+
+    pub fn pixel(&mut self, x: usize, y: usize, color: u32) {
+        if x < self.width && y < self.height {
+            let index = y * self.width + x;
+            self.buffer[index] = color;
+        }
+    }
+
+    pub fn rectangle(
+        &mut self,
+        x: usize,
+        y: usize,
+        width: usize,
+        height: usize,
+        color: u32,
+    ) {
+        let end_x = x.saturating_add(width).min(self.width);
+        let end_y = y.saturating_add(height).min(self.height);
+
+        for py in y.min(self.height)..end_y {
+            for px in x.min(self.width)..end_x {
+                self.pixel(px, py, color);
+            }
+        }
+    }
+}
+===== GUI CANVAS =====
+
+use super::framebuffer::Framebuffer;
+
+pub struct Canvas<'a> {
+    pub fb: Framebuffer<'a>,
+}
+
+impl<'a> Canvas<'a> {
+    pub fn new(fb: Framebuffer<'a>) -> Self {
+        Self { fb }
+    }
+
+    pub fn background(&mut self) {
+        self.fb.clear(0xFF08090D);
+    }
+
+    pub fn panel(&mut self, x: usize, y: usize, w: usize, h: usize) {
+        self.fb.rectangle(x, y, w, h, 0xFF17191F);
+    }
+
+    pub fn accent(&mut self, x: usize, y: usize, w: usize, h: usize) {
+        self.fb.rectangle(x, y, w, h, 0xFFB7FF36);
+    }
+}
+===== INSTALLER CARGO =====
+
+[package]
+name = "bloxos-installer"
+version = "0.1.0"
+edition = "2021"
+===== INSTALLER MAIN =====
+
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum InstallStep {
+    Welcome,
+    Language,
+    Account,
+    Purpose,
+    Network,
+    Partition,
+    Summary,
+    Installing,
+    Complete,
+}
+
+fn main() {
+    println!("BloxOS Installer");
+    println!("Version: 0.1.0");
+    println!("Installer initialization placeholder");
+}
+
+pub struct Installer {
+    pub step: InstallStep,
+    pub language: String,
+    pub username: String,
+    pub password: String,
+    pub confirm_password: String,
+    pub recovery: String,
+}
+
+impl Installer {
+    pub fn new() -> Self {
+        Self {
+            step: InstallStep::Welcome,
+            language: "English".into(),
+            username: String::new(),
+            password: String::new(),
+            confirm_password: String::new(),
+            recovery: String::new(),
+        }
+    }
+
+    pub fn next(&mut self) -> Result<(), &'static str> {
+        self.step = match self.step {
+            InstallStep::Welcome => InstallStep::Language,
+            InstallStep::Language => InstallStep::Account,
+            InstallStep::Account => {
+                if self.username.trim().is_empty()
+                    || self.password.is_empty()
+                    || self.confirm_password.is_empty()
+                    || self.recovery.trim().is_empty()
+                {
+                    return Err("All account fields are required");
+                }
+
+                if self.password != self.confirm_password {
+                    return Err("Passwords do not match");
+                }
+
+                InstallStep::Purpose
+            }
+            InstallStep::Purpose => InstallStep::Network,
+            InstallStep::Network => InstallStep::Partition,
+            InstallStep::Partition => InstallStep::Summary,
+            InstallStep::Summary => InstallStep::Installing,
+            InstallStep::Installing => InstallStep::Complete,
+            InstallStep::Complete => InstallStep::Complete,
+        };
+
+        Ok(())
+    }
+}
+===== DESKTOP CARGO =====
+
+[package]
+name = "bloxos-desktop"
+version = "0.1.0"
+edition = "2021"
+===== DESKTOP MAIN =====
+
+fn main() {
+    println!("BloxOS Desktop Environment");
+    println!("Version: 0.1.0");
+    println!("Desktop initialization placeholder");
+}
+
+pub struct LockScreen {
+    pub locked: bool,
+    pub username: String,
+}
+
+impl LockScreen {
+    pub fn new(username: String) -> Self {
+        Self {
+            locked: true,
+            username,
+        }
+    }
+
+    pub fn unlock(&mut self, authenticated: bool) -> bool {
+        if authenticated {
+            self.locked = false;
+        }
+
+        !self.locked
+    }
+}
+===== SYSTEM CARGO =====
+[package]
+name = "bloxos-system"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+path = "src/lib.rs"===== SYSTEM LIB =====
+#![no_std]
+
+pub mod services;
+pub mod network;
+pub mod storage;
+pub mod drivers;===== FILESYSTEM CARGO =====
+
+[package]
+name = "bloxos-filesystem"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+path = "src/lib.rs"
+===== FILESYSTEM LIB =====
+
+#![no_std]
+
+pub mod file;
+pub mod directory;
+pub mod metadata;
+
+pub const FILESYSTEM_VERSION: &str = "0.1.0";
