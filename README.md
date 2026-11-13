@@ -1,4 +1,5 @@
 # BloxOS
+
 <p align="center">
   <strong>BloxOS — Beyond the Desktop.</strong>
   <br />
@@ -106,7 +107,7 @@ Its intended components include:
 - System notifications.
 - Integrated system applications.
 
-These components are part of the broader BloxOS graphical environment and are being developed alongside the underlying system infrastructure.
+The current desktop has an early graphical implementation. Other components remain under development.
 
 ## Planned System Applications
 
@@ -142,6 +143,8 @@ BloxOS/
     └── User accounts and personal files
 ```
 
+This is a proposed organization for the future system environment, not a claim that the complete directory structure is already implemented.
+
 The planned application infrastructure includes:
 
 - Separate application locations.
@@ -152,11 +155,11 @@ The planned application infrastructure includes:
 
 ## BXZ-LANG Integration
 
-**BXZ-LANG** is a language project developed within the BoxZero ecosystem.
+**BXZ-LANG** is a programming language project developed within the BoxZero ecosystem.
 
 BloxOS is designed to integrate BXZ-LANG into its installation experience.
 
-During installation, users will be able to choose whether to install BXZ-LANG or continue without it.
+The planned installation flow will allow users to choose whether to install BXZ-LANG or continue without it.
 
 This integration is part of the broader BoxZero ecosystem and its localization direction.
 
@@ -167,12 +170,16 @@ The technologies currently associated with BloxOS development include:
 | Technology | Purpose |
 |---|---|
 | Rust | Kernel and low-level system development |
+| C / C++ | Supporting system and graphics components |
+| NASM | Assembly-level boot components |
 | x86_64 | Target processor architecture |
 | Multiboot2 | Kernel boot information and boot protocol |
 | Framebuffer | Low-level graphical output |
 | GRUB | Bootloader infrastructure |
 | UEFI | Modern boot environment testing |
 | QEMU | Virtual machine and boot testing |
+| Cargo | Rust workspace and build management |
+| CMake | Supporting native components |
 
 The technology stack may evolve as additional system components are implemented.
 
@@ -180,173 +187,95 @@ The technology stack may evolve as additional system components are implemented.
 
 BloxOS is organized around separate system responsibilities.
 
-The following diagram represents the project's architectural direction:
+The following diagram represents the project's architectural direction and may evolve during development:
 
 ```text
-BloxOS/
+bloxos/
 │
-├── kernel/
-│   └── Kernel implementation
+├── assets/
+│   └── Icons, fonts, wallpapers and visual resources
 │
 ├── base/
 │   └── Essential system components
 │
+├── boot/
+│   └── Bootloader and startup infrastructure
+│
 ├── cli/
 │   └── Command-line infrastructure
 │
+├── cpp/
+│   └── Native system and graphics components
+│
+├── desktop/
+│   └── Desktop environment components
+│
+├── filesystem/
+│   └── Filesystem implementation
+│
+├── gui/
+│   └── Graphical rendering infrastructure
+│
+├── installer/
+│   └── System installation components
+│
+├── kernel/
+│   └── Kernel implementation
+│
 ├── package-manager/
-│   └── Package management
+│   └── Package management infrastructure
 │
 ├── shell/
 │   └── System shell
 │
+├── system/
+│   └── Core system components
+│
 ├── system-services/
 │   └── Background system services
 │
-├── installer/
-│   └── Operating system installer
-│
-├── gui/
-│   └── Graphical rendering and desktop components
-│
-├── apps/
-│   └── System applications
-│
-├── assets/
-│   └── Icons and visual resources
-│
-├── docs/
-│   └── Technical documentation
-│
-└── README.md
+├── Cargo.toml
+├── CMakeLists.txt
+├── Makefile
+├── build-all.cmd
+├── build-all.sh
+├── CONTRIBUTING.md
+├── COPYRIGHT
+├── LICENSE
+├── README.md
+└── SECURITY.md
 ```
 
-This is a high-level architectural overview, not a verified listing of every directory currently present in the repository.
+This overview describes the current project organization. Individual components may be reorganized as development progresses.
 
 ## Building & Boot Testing
 
-BloxOS development includes generating bootable ISO images and testing them in a virtual machine.
+BloxOS provides build scripts for supported development environments.
+
+### Windows
+
+Run the following command from the repository root:
+
+```powershell
+.\build-all.cmd
+```
+
+### Linux
+
+Make the build script executable and run it:
+
+```bash
+chmod +x build-all.sh
+./build-all.sh
+```
+
+Build requirements may vary depending on the operating system, installed toolchain, and environment configuration.
 
 ### QEMU Testing
 
-A basic example for testing a generated ISO:
+After successfully generating an ISO image, it can be tested using QEMU:
 
 ```bash
 qemu-system-x86_64 \
   -cdrom build/bloxos-27H1-Horizon.iso \
-  -m 512M \
-  -smp 1
-```
-
-### UEFI Testing
-
-BloxOS also undergoes UEFI boot testing with a compatible firmware image.
-
-Example configuration:
-
-```bash
-qemu-system-x86_64 \
-  -machine q35 \
-  -m 512M \
-  -smp 1 \
-  -drive if=pflash,format=raw,unit=0,readonly=on,file="PATH_TO_UEFI_CODE.fd" \
-  -cdrom build/bloxos-27H1-Horizon.iso \
-  -boot d
-```
-
-Replace the firmware path with the location of the compatible UEFI firmware on your system.
-
-**Note:** These commands are examples for testing an existing ISO image. Exact compilation and ISO-generation instructions will be documented alongside the actual build configuration and source files.
-
-## Development Roadmap
-
-BloxOS development is divided into several major areas.
-
-| Area | Development Focus |
-|---|---|
-| Kernel | Kernel initialization and core functionality |
-| Boot Infrastructure | Bootloader and UEFI integration |
-| Graphics | Framebuffer and rendering infrastructure |
-| Desktop | Desktop environment and system interface |
-| Base System | Essential operating system components |
-| System Services | Background system functionality |
-| Installer | Installation and initial configuration |
-| File Explorer | File and directory management |
-| Package Manager | Application and package infrastructure |
-| System Applications | Integrated operating system utilities |
-
-### Future Development Goals
-
-- Expanded hardware support.
-- More complete kernel functionality.
-- Improved graphics infrastructure.
-- Advanced desktop and window management.
-- Integrated system applications.
-- Application installation and management.
-- Expanded localization.
-- Improved system stability and security.
-
-Roadmap items are planned development goals, not claims of completed functionality.
-
-## Development Status
-
-**Current Status: In Development**
-
-BloxOS is actively being developed by BoxZero.
-
-Current work includes kernel development, boot infrastructure, framebuffer rendering, graphical system components, and virtual machine testing.
-
-The project is still evolving and is not yet a final production release.
-
-### Target Release
-
-**BloxOS 27H1 Horizon**
-
-Target release: **March 2027**
-
-Release timing and feature availability may change as development progresses.
-
-## Contributing
-
-We welcome feedback, suggestions, bug reports, and contributions from the developer community.
-
-You can contribute by:
-
-1. Reporting bugs through GitHub Issues.
-2. Suggesting improvements.
-3. Improving technical documentation.
-4. Reviewing source code.
-5. Submitting Pull Requests.
-
-Contributions should follow the project's architecture and development direction.
-
-## About BoxZero
-
-BloxOS is developed by **BoxZero**, an independent technology and software development initiative focused on building software, tools, and digital experiences.
-
-### Official Links
-
-- 🌐 Website: https://www.boxzero.ir
-- 📢 Telegram: https://t.me/BoxZero_company
-- 💬 Support: @boxzerosupport
-- ✉️ Email: boxzero.company@gmail.com
-
-## License
-
-BloxOS is licensed under the **MIT License**.
-
-See the [LICENSE](LICENSE) file for the complete license text.
-
----
-
-<p align="center">
-  <strong>BloxOS</strong>
-  <br />
-  Beyond the Desktop.
-  <br /><br />
-  <strong>Developed by BoxZero</strong>
-  <br />
-  Building Beyond Limits.
-  <br /><br />
-  © 2026 BoxZero. All rights reserved.
-</p>
+  -m 512M
