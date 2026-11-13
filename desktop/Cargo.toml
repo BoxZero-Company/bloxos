@@ -1,0 +1,13 @@
+
+[package]
+name = "bloxos-desktop"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+name = "bloxos_desktop"
+path = "src/lib.rs"
+
+[dependencies]
+bloxos-gui = { path = "../gui" }
